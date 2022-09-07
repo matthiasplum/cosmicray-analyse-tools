@@ -1,3 +1,9 @@
+'''
+Created on Sep 6, 2022
+
+@author: Matthias Plum
+@email:  matthias.plum@sdsmt.edu
+'''
 import numpy as np
 from scipy.stats import truncnorm
 
@@ -18,7 +24,6 @@ nH  = 500
 nHe = 100
 nO  = 200
 nFe = 500
-
 
 ### Template shape generation
 bound_a   = 0.
@@ -65,25 +70,20 @@ ax.legend(loc=0)
 fig2, (ax1,ax2) = mpl.subplots(2, 1)
 
 ax1.hist(data, bins=bins, density=False, stacked=True,histtype='step', color=['r','orange','g','b'])
-
 ax2.hist(data_flat, bins=bins,density=True)
 
 ### Create list of the template PDFs or functions
 template_pdfs = [rv_H.pdf,rv_He.pdf,rv_O.pdf,rv_Fe.pdf]
 
 ### Run template fitting method binned or unbinned
+template = Template_Analysis(minos=run_minos)
+template.join_pdfs(template_pdfs)
 if binned:
-  bin_template = Template_Analysis(minos=run_minos)
-  bin_template.join_pdfs(template_pdfs)
-  bin_template.template_binned_likelihood(data_flat, bins, fit_range)
-  
-  bin_template.likelihood.show(bin_template.minuit, ax=ax2, parts=True);
+  template.template_binned_likelihood(data_flat, bins, fit_range)
+  template.likelihood.show(template.minuit, ax=ax2, parts=True);
 else:
-  unbin_template = Template_Analysis(minos=run_minos)
-  unbin_template.join_pdfs(template_pdfs)
-  unbin_template.template_unbinned_likelihood(data_flat)
-  
-  unbin_template.likelihood.show(unbin_template.minuit,bins=len(bins), parts=True);
+  template.template_unbinned_likelihood(data_flat)
+  template.likelihood.show(template.minuit, ax=ax2, bins=len(bins), parts=True);
 
 mpl.show()
 
