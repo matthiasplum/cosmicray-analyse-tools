@@ -27,13 +27,13 @@ class Template_Analysis:
     ### Define an extended PDF consisting of four components
     self.pdf = probfit.AddPdf(*pdfs_list)
   
-  def template_binned_likelihood(self, data,set_bins,set_fitrange):
+  def template_binned_likelihood(self, data, set_bins, set_fitrange, weights = None):
     ### Start fit-parameter (Assume worst case)
     pars = {}
     for i in range(self.num_pdfs):
       pars['N'+str(i+1)]=len(data)/self.num_pdfs
 
-    self.likelihood = probfit.BinnedLH(self.pdf, data, bins=len(set_bins), extended=True, bound=set_fitrange)
+    self.likelihood = probfit.BinnedLH(self.pdf, data, bins=len(set_bins), extended=True, bound=set_fitrange, weights=weights)
 
     self.minuit = iminuit.Minuit(self.likelihood, pedantic=False, print_level=0,**pars)
     self.minuit.migrad()
@@ -49,13 +49,13 @@ class Template_Analysis:
     print('correlation matrix:')
     print(self.minuit.matrix(correlation=True))
 
-  def template_unbinned_likelihood(self, data):
+  def template_unbinned_likelihood(self, data, weights = None):
     ### Start fit-parameter (Assume worst case)
     pars = {}
     for i in range(self.num_pdfs):
       pars['N'+str(i+1)]=len(data)/self.num_pdfs
 
-    self.likelihood = probfit.UnbinnedLH(self.pdf, data, extended=True)
+    self.likelihood = probfit.UnbinnedLH(self.pdf, data, weights=weights, extended=True)
 
     self.minuit = iminuit.Minuit(self.likelihood, pedantic=False, print_level=0,**pars)
     self.minuit.migrad()
