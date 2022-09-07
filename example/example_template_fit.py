@@ -15,7 +15,7 @@ x         = np.linspace(0,np.log(56),200)
 bins      = np.linspace(0,np.log(56),50)
 fit_range =(0,np.log(56))
 
-binned    = False
+binned    = True
 run_minos = False
 seed      = 42
 
