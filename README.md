@@ -1,1 +1,1 @@
-# cosmicray-analyse-tools
+# cosmicray-analysis-tools
