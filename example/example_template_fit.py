@@ -3,7 +3,7 @@ from scipy.stats import truncnorm
 
 import pylab as mpl
 
-from template_analysis.Template_Fit import CR_Template_Analysis
+from template_analysis.Template_Fit import Template_Analysis
 ####Setup example 
 x = np.linspace(0,np.log(56),200)
 bins = np.linspace(0,np.log(56),50)
@@ -50,6 +50,7 @@ O_data=rv_O.rvs(nO,random_state=seed)
 Fe_data=rv_Fe.rvs(nFe,random_state=seed)
 
 data = [H_data,He_data,O_data,Fe_data]
+
 data_flat = np.concatenate(data)
 
 ###Plotting PDFs
@@ -64,6 +65,7 @@ ax.legend(loc=0)
 fig2, (ax1,ax2) = mpl.subplots(2, 1)
 
 ax1.hist(data, bins=bins, density=False, stacked=True,histtype='step', color=['r','orange','g','b'])
+
 ax2.hist(data_flat, bins=bins,density=True)
 
 ### Create list of the template PDFs or functions
@@ -71,13 +73,13 @@ template_pdfs = [rv_H.pdf,rv_He.pdf,rv_O.pdf,rv_Fe.pdf]
 
 ### Run template fitting method binned or unbinned
 if binned:
-  bin_template = CR_Template_Analysis(minos=run_minos)
+  bin_template = Template_Analysis(minos=run_minos)
   bin_template.join_pdfs(template_pdfs)
   bin_template.template_binned_likelihood(data_flat, bins, fit_range)
   
   bin_template.likelihood.show(bin_template.minuit, ax=ax2, parts=True);
 else:
-  unbin_template = CR_Template_Analysis(minos=run_minos)
+  unbin_template = Template_Analysis(minos=run_minos)
   unbin_template.join_pdfs(template_pdfs)
   unbin_template.template_unbinned_likelihood(data_flat)
   

@@ -6,7 +6,7 @@ Created on Sep 6, 2022
 import probfit
 import iminuit
 
-class CR_Template_Analysis:
+class Template_Analysis:
 
 
     def __init__(self,minos=False):
