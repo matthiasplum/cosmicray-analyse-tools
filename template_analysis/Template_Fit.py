@@ -45,7 +45,7 @@ class Template_Analysis:
       self.likelihood = probfit.UnbinnedLH(self.pdf, data, weights=weights, extended=True)
 
     self.minuit = iminuit.Minuit(self.likelihood, **pars)
-    self.minuit.limits["N1", "N2", "N3",'N4'] = (0, len(data))
+    self.minuit.limits[list(pars.keys())] = (0, len(data))
     self.minuit.strategy = self.strategy
     self.minuit.errordef = 0.5
     self.minuit.print_level = 0
