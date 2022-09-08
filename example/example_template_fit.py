@@ -15,13 +15,18 @@ x         = np.linspace(0,np.log(56),200)
 bins      = np.linspace(0,np.log(56),50)
 fit_range =(0,np.log(56))
 
-binned    = True
+### Binned likelihood
+set_binned = True
+### Fit strategy (0 = Fast, 2= Best)
+set_strategy = 0
+### run minos to get asymetrical error
 run_minos = False
-seed      = 42
+### set random seed
+seed = 42
 
 ### Number of events per elementary group
-nH  = 500
-nHe = 100
+nH  = 200
+nHe = 0
 nO  = 200
 nFe = 500
 
@@ -79,15 +84,15 @@ ax2.hist(data_flat, bins=bins, density=True)
 template_pdfs = [rv_H.pdf,rv_He.pdf,rv_O.pdf,rv_Fe.pdf]
 
 ### Run template fitting method binned or unbinned
-template = Template_Analysis(minos=run_minos)
+template = Template_Analysis(minos=run_minos,binned=set_binned,strategy=set_strategy)
 template.join_pdfs(template_pdfs)
 
-if binned:
-  template.template_binned_likelihood(data_flat, bins, fit_range)
-  template.likelihood.show(template.minuit, ax=ax2, parts=True);
+template.template_likelihood(data_flat, bins, fit_range)
+
+if set_binned:
+  template.likelihood.draw(args=template.minuit.values, errors=template.minuit.errors, parts=True, ax=ax2)
 else:
-  template.template_unbinned_likelihood(data_flat)
-  template.likelihood.show(template.minuit, ax=ax2, bins=len(bins), parts=True);
+  template.likelihood.draw(args=template.minuit.values, errors=template.minuit.errors, parts=True, bins=len(bins), ax=ax2)
 
 mpl.show()
 
