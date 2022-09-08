@@ -10,17 +10,17 @@ import pkg_resources
 
 class Template_Analysis:
 
-  def __init__(self, minos=False, binned= False, strategy=0):
+  def __init__(self, minos=False, binned=False, strategy=0):
     if pkg_resources.parse_version(iminuit.__version__) < pkg_resources.parse_version("2.16.0"):
       raise RuntimeError("Found iminiut version "+iminuit.__version__+" is to old. Please upgrade.")
     
-    self.minos = minos
-    self.binned = binned
-    self.strategy = strategy
-    self.num_pdfs = 1
-    self.pdf = None
+    self.minos      = minos
+    self.binned     = binned
+    self.strategy   = strategy
+    self.num_pdfs   = 1
+    self.pdf        = None
     self.likelihood = None
-    self.minuit = None
+    self.minuit     = None
 
   def join_pdfs(self,template_pdfs):
     ### Set number of PDFs in template analysis
@@ -33,7 +33,7 @@ class Template_Analysis:
     ### Define an extended PDF consisting of four components
     self.pdf = probfit.AddPdf(*pdfs_list)
 
-  def template_likelihood(self, data, set_bins, set_fitrange, weights = None):
+  def template_likelihood(self, data, set_bins, set_fitrange, weights=None):
     ### Start fit-parameter (Assume worst case)
     pars = {}
     for i in range(self.num_pdfs):
@@ -49,10 +49,9 @@ class Template_Analysis:
     self.minuit.strategy = self.strategy
     self.minuit.errordef = 0.5
     self.minuit.print_level = 0
-    #print(self.binned,self.strategy)
     
     self.minuit.migrad()
-    #self.minuit.hesse()
+    self.minuit.hesse()
     if self.minos:
       self.minuit.minos()
       
