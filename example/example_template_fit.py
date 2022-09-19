@@ -9,7 +9,8 @@ from scipy.stats import truncnorm
 
 import pylab as mpl
 
-from template_analysis.Template_Fit import Template_Analysis
+from crtemplate_analysis.crtemplate_analysis import Template_Analysis
+
 ####Setup example 
 x         = np.linspace(0,np.log(56),200)
 bins      = np.linspace(0,np.log(56),50)
